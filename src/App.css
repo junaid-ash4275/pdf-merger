@@ -1,0 +1,162 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+.background-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: float 20s ease-in-out infinite;
+}
+
+.glow-orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #FF6B35, transparent);
+  top: -200px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.glow-orb-2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #FF8C42, transparent);
+  bottom: -150px;
+  right: -100px;
+  animation-delay: 5s;
+}
+
+.glow-orb-3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #FFA500, transparent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 10s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, -30px) scale(1.05);
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+  75% {
+    transform: translate(20px, 10px) scale(1.02);
+  }
+}
+
+.app-header {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.app-title {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #FF6B35, #FFA500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  text-shadow: 0 0 40px rgba(255, 107, 53, 0.3);
+}
+
+.title-icon {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.5));
+}
+
+.app-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem 4rem;
+  position: relative;
+  z-index: 2;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 2;
+}
+
+.heart {
+  color: #FF6B35;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 2rem;
+  }
+  
+  .title-icon {
+    font-size: 1.8rem;
+  }
+  
+  .app-subtitle {
+    font-size: 1rem;
+  }
+  
+  .glow-orb-1 {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .glow-orb-2 {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .glow-orb-3 {
+    width: 180px;
+    height: 180px;
+  }
+}
