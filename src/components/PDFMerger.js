@@ -15,6 +15,10 @@ import {
 import './PDFMerger.css';
 
 const PDFMerger = () => {
+
+  //add something here to make git commit
+  
+
   const [pdfFiles, setPdfFiles] = useState([]);
   const [merging, setMerging] = useState(false);
   const [mergedPdf, setMergedPdf] = useState(null);
@@ -185,39 +189,46 @@ const PDFMerger = () => {
                     ref={provided.innerRef}
                     className={`file-list ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
                   >
-                    <AnimatePresence>
-                      {pdfFiles.map((pdf, index) => (
-                        <Draggable key={pdf.id} draggableId={pdf.id} index={index}>
-                          {(provided, snapshot) => (
-                            <motion.div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
+                    {pdfFiles.map((pdf, index) => (
+                      <Draggable key={pdf.id} draggableId={pdf.id} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`file-item ${snapshot.isDragging ? 'dragging' : ''}`}
+                            style={{
+                              ...provided.draggableProps.style,
+                              opacity: snapshot.isDragging ? 0.8 : 1,
+                              transform: snapshot.isDragging 
+                                ? `${provided.draggableProps.style?.transform} rotate(2deg)` 
+                                : provided.draggableProps.style?.transform
+                            }}
+                          >
+                            <div 
                               {...provided.dragHandleProps}
-                              className={`file-item ${snapshot.isDragging ? 'dragging' : ''}`}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: 20 }}
-                              transition={{ duration: 0.2, delay: index * 0.05 }}
+                              className="drag-handle"
+                              title="Drag to reorder"
                             >
-                              <div className="file-info">
-                                <FiFile className="file-icon" />
-                                <div className="file-details">
-                                  <span className="file-name">{pdf.name}</span>
-                                  <span className="file-size">{pdf.size}</span>
-                                </div>
+                              <FiMove className="drag-icon" />
+                            </div>
+                            <div className="file-info">
+                              <FiFile className="file-icon" />
+                              <div className="file-details">
+                                <span className="file-name">{pdf.name}</span>
+                                <span className="file-size">{pdf.size}</span>
                               </div>
-                              <button
-                                className="remove-button"
-                                onClick={() => removeFile(pdf.id)}
-                                title="Remove file"
-                              >
-                                <FiX />
-                              </button>
-                            </motion.div>
-                          )}
-                        </Draggable>
-                      ))}
-                    </AnimatePresence>
+                            </div>
+                            <button
+                              className="remove-button"
+                              onClick={() => removeFile(pdf.id)}
+                              title="Remove file"
+                            >
+                              <FiX />
+                            </button>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
                     {provided.placeholder}
                   </div>
                 )}
