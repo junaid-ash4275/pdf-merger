@@ -238,6 +238,7 @@
   align-items: center;
   gap: 1rem;
   transition: all 0.3s ease;
+  cursor: grab;
 }
 
 .file-item:hover {
@@ -251,25 +252,6 @@
   opacity: 0.8;
   background: rgba(255, 107, 53, 0.1);
   box-shadow: 0 8px 30px rgba(255, 107, 53, 0.3);
-}
-
-.drag-handle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  cursor: grab;
-  color: rgba(255, 255, 255, 0.5);
-  transition: color 0.3s ease;
-  flex-shrink: 0;
-}
-
-.drag-handle:hover {
-  color: #FF6B35;
-}
-
-.drag-handle:active {
   cursor: grabbing;
 }
 
@@ -277,17 +259,29 @@
   font-size: 1rem;
 }
 
-.file-info {
+.file-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex: 1;
+  gap: 0.75rem;
 }
 
-.file-icon {
-  font-size: 1.5rem;
-  color: #FF8C42;
-  flex-shrink: 0;
+.hover-reorder-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.file-item:hover .hover-reorder-indicator {
+  background: rgba(255, 107, 53, 0.12);
+  color: #FF6B35;
+  transform: translateX(2px);
 }
 
 .file-details {
@@ -308,6 +302,70 @@
 .file-size {
   color: rgba(255, 255, 255, 0.5);
   font-size: 0.85rem;
+}
+
+.file-pages {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+}
+
+.page-selection {
+  margin-top: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 107, 53, 0.15);
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.page-selection label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #FFA500;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.page-selection-input {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.page-selection-input:focus {
+  outline: none;
+  border-color: rgba(255, 107, 53, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+.page-selection-input-error {
+  border-color: rgba(255, 59, 48, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.2);
+}
+
+.page-selection-hint {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.page-selection-error {
+  color: #FF6B6B;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.page-selection-summary {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  margin: 0;
 }
 
 .remove-button {
