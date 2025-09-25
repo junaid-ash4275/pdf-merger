@@ -30,6 +30,18 @@ const notificationStyles = {
 
 const cn = (...classes) => classes.filter(Boolean).join(' ');
 
+const ensureUint8Array = (data) => {
+  if (data instanceof Uint8Array) {
+    return data;
+  }
+
+  if (data instanceof ArrayBuffer) {
+    return new Uint8Array(data);
+  }
+
+  return new Uint8Array([]);
+};
+
 const PDFPageRemover = () => {
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -80,7 +92,8 @@ const PDFPageRemover = () => {
   }, []);
 
   const generateThumbnails = useCallback(async (arrayBuffer) => {
-    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdfData = ensureUint8Array(arrayBuffer);
+    const loadingTask = pdfjsLib.getDocument({ data: pdfData, disableWorker: true });
     const pdf = await loadingTask.promise;
     const entries = [];
 
@@ -119,7 +132,14 @@ const PDFPageRemover = () => {
   const [dropError, setDropError] = useState(null);
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    const pdfFile = acceptedFiles.find((file) => file.type === 'application/pdf');
+    const pdfFile = acceptedFiles.find((file) => {
+      if (file.type === 'application/pdf') {
+        return true;
+      }
+
+      const lowerCaseName = file.name?.toLowerCase();
+      return Boolean(lowerCaseName && lowerCaseName.endsWith('.pdf'));
+    });
 
     if (!pdfFile) {
       setDropError('Please select a PDF file to continue.');
@@ -132,6 +152,7 @@ const PDFPageRemover = () => {
     setProcessing(false);
 
     try {
+      debugger;
       const arrayBuffer = await pdfFile.arrayBuffer();
       const { base, extension } = extractNameParts(pdfFile.name);
       const { totalPages, pages: pageEntries } = await generateThumbnails(arrayBuffer);
@@ -143,9 +164,10 @@ const PDFPageRemover = () => {
         sizeLabel: `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB`,
         totalPages
       });
+      const typedArray = ensureUint8Array(arrayBuffer);
       setPages(pageEntries);
-      setPdfBytes(new Uint8Array(arrayBuffer));
-      updateDownloadPayload(arrayBuffer, pdfFile.name);
+      setPdfBytes(typedArray);
+      updateDownloadPayload(typedArray, pdfFile.name);
 
       showNotification(`Loaded ${totalPages} page(s) from ${pdfFile.name}`, 'success');
     } catch (error) {

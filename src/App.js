@@ -8,6 +8,14 @@ import PDFPageRemover from './components/PDFPageRemover';
 function App() {
   const [activeTool, setActiveTool] = useState(null);
 
+  const handleNavClick = (toolId) => {
+    setActiveTool(toolId ?? null);
+
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const tools = useMemo(
     () => [
       {
@@ -45,7 +53,57 @@ function App() {
           style={{ animationDelay: '10s' }}
         ></div>
       </div>
-      
+
+      <motion.nav
+        className="relative z-[2] flex flex-col gap-4 px-6 pt-8 text-white sm:flex-row sm:items-center sm:justify-between"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <button
+          type="button"
+          className="flex items-center gap-2 text-lg font-semibold text-white/90 transition duration-300 hover:text-white"
+          onClick={() => handleNavClick(null)}
+        >
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-orange text-[0.7rem] font-black uppercase tracking-[0.22em] text-white shadow-lg shadow-brand-orange/35">
+            PT
+          </span>
+          PDF Toolkit
+        </button>
+
+        <div className="flex flex-wrap items-center gap-2 text-sm font-medium sm:justify-end">
+          <button
+            type="button"
+            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${!activeTool ? 'bg-white/15 text-white' : 'text-white/70'}`}
+            onClick={() => handleNavClick(null)}
+          >
+            Home
+          </button>
+          <button
+            type="button"
+            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'merge' ? 'bg-white/15 text-white' : 'text-white/70'}`}
+            onClick={() => handleNavClick('merge')}
+          >
+            Merge PDFs
+          </button>
+          <button
+            type="button"
+            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'remove' ? 'bg-white/15 text-white' : 'text-white/70'}`}
+            onClick={() => handleNavClick('remove')}
+          >
+            Remove Pages
+          </button>
+          <a
+            href="https://github.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full px-4 py-2 text-white/70 transition duration-300 hover:bg-white/15 hover:text-white"
+          >
+            GitHub
+          </a>
+        </div>
+      </motion.nav>
+
       <motion.header
         className="relative z-[2] px-4 pb-8 pt-12 text-center"
         initial={{ opacity: 0, y: -20 }}
@@ -53,7 +111,9 @@ function App() {
         transition={{ duration: 0.6 }}
       >
         <h1 className="inline-flex items-center gap-4 text-5xl font-bold text-transparent drop-shadow-title sm:text-4xl bg-gradient-orange-strong bg-clip-text">
-          <span className="text-4xl drop-shadow-emoji sm:text-3xl">🧰</span>
+          <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-orange text-2xl font-black uppercase tracking-[0.4em] text-white drop-shadow-emoji sm:h-12 sm:w-12 sm:text-lg">
+            PT
+          </span>
           {activeToolMeta ? activeToolMeta.name : 'PDF Toolkit'}
         </h1>
         <p className="mt-2 text-lg font-light text-white/70 sm:text-base">
