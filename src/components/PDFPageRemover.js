@@ -32,11 +32,15 @@ const cn = (...classes) => classes.filter(Boolean).join(' ');
 
 const ensureUint8Array = (data) => {
   if (data instanceof Uint8Array) {
-    return data;
+    return new Uint8Array(data);
+  }
+
+  if (ArrayBuffer.isView(data)) {
+    return new Uint8Array(data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
   }
 
   if (data instanceof ArrayBuffer) {
-    return new Uint8Array(data);
+    return new Uint8Array(data.slice(0));
   }
 
   return new Uint8Array([]);
@@ -288,7 +292,7 @@ const PDFPageRemover = () => {
   const hasPdfLoaded = Boolean(pdfInfo && pages.length > 0);
 
   return (
-    <div className="relative mx-auto w-full max-w-[960px]">
+    <div className="relative mx-auto w-full max-w-[1200px]">
       <AnimatePresence>
         {notification && (
           <motion.div
@@ -388,7 +392,7 @@ const PDFPageRemover = () => {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
               {pages.map((page) => (
                 <button
                   key={page.pageNumber}
@@ -399,11 +403,11 @@ const PDFPageRemover = () => {
                     page.selectedForRemoval && 'border-[rgba(255,107,107,0.6)] shadow-[0_10px_30px_rgba(255,107,107,0.25)]'
                   )}
                 >
-                  <div className="relative h-40 w-full overflow-hidden bg-black/20">
+                  <div className="relative h-52 w-full overflow-hidden rounded-xl bg-black/15">
                     <img
                       src={page.thumbnail}
                       alt={`Page ${page.pageNumber}`}
-                      className="h-full w-full object-contain"
+                      className="h-full w-full object-contain p-2"
                     />
                     <span className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold text-white/80 backdrop-blur">
                       {page.pageNumber}

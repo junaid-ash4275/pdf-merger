@@ -1,12 +1,19 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiChevronRight, FiLayers, FiScissors } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronRight, FiLayers, FiScissors, FiGrid, FiRefreshCcw } from 'react-icons/fi';
 
 import PDFMerger from './components/PDFMerger';
 import PDFPageRemover from './components/PDFPageRemover';
+import PDFSplitter from './components/PDFSplitter';
+import PDFPageOrganizer from './components/PDFPageOrganizer';
 
 function App() {
   const [activeTool, setActiveTool] = useState(null);
+  const brandLogo = `${process.env.PUBLIC_URL || ''}/assets/brand.png`;
+  const brandTextStyle = {
+    fontFamily: "'Quattrocento', 'Poppins', 'Inter', serif",
+    color: 'rgb(255, 107, 53)'
+  };
 
   const handleNavClick = (toolId) => {
     setActiveTool(toolId ?? null);
@@ -33,6 +40,22 @@ function App() {
         icon: FiScissors,
         accent: 'from-[rgba(255,107,107,0.18)] via-[rgba(255,140,140,0.14)] to-transparent',
         component: <PDFPageRemover />
+      },
+      {
+        id: 'organize',
+        name: 'Organize Pages',
+        description: 'Reorder, rotate, duplicate, and export pages from a single PDF.',
+        icon: FiRefreshCcw,
+        accent: 'from-[rgba(255,184,77,0.18)] via-[rgba(255,140,66,0.14)] to-transparent',
+        component: <PDFPageOrganizer />
+      },
+      {
+        id: 'split',
+        name: 'Split PDF',
+        description: 'Divide a PDF into multiple documents using custom page ranges.',
+        icon: FiGrid,
+        accent: 'from-[rgba(167,201,87,0.18)] via-[rgba(131,194,149,0.14)] to-transparent',
+        component: <PDFSplitter />
       }
     ],
     []
@@ -62,13 +85,15 @@ function App() {
       >
         <button
           type="button"
-          className="flex items-center gap-2 text-lg font-semibold text-white/90 transition duration-300 hover:text-white"
+          className="flex items-center gap-3 text-lg font-semibold text-white/90 transition duration-300 hover:text-white"
           onClick={() => handleNavClick(null)}
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-orange text-[0.7rem] font-black uppercase tracking-[0.22em] text-white shadow-lg shadow-brand-orange/35">
-            PT
+          <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full drop-shadow-emoji">
+            <img src={brandLogo} alt="MergeMate logo" className="h-full w-full object-cover" />
           </span>
-          PDF Toolkit
+          <span className="text-2xl" style={brandTextStyle}>
+            MergeMate
+          </span>
         </button>
 
         <div className="flex flex-wrap items-center gap-2 text-sm font-medium sm:justify-end">
@@ -93,6 +118,20 @@ function App() {
           >
             Remove Pages
           </button>
+          <button
+            type="button"
+            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'organize' ? 'bg-white/15 text-white' : 'text-white/70'}`}
+            onClick={() => handleNavClick('organize')}
+          >
+            Organize Pages
+          </button>
+          <button
+            type="button"
+            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'split' ? 'bg-white/15 text-white' : 'text-white/70'}`}
+            onClick={() => handleNavClick('split')}
+          >
+            Split PDF
+          </button>
           <a
             href="https://github.com/"
             target="_blank"
@@ -111,15 +150,23 @@ function App() {
         transition={{ duration: 0.6 }}
       >
         <h1 className="inline-flex items-center gap-4 text-5xl font-bold text-transparent drop-shadow-title sm:text-4xl bg-gradient-orange-strong bg-clip-text">
-          <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-orange text-2xl font-black uppercase tracking-[0.4em] text-white drop-shadow-emoji sm:h-12 sm:w-12 sm:text-lg">
-            PT
+          <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full drop-shadow-emoji sm:h-12 sm:w-12">
+            <img src={brandLogo} alt="MergeMate logo" className="h-full w-full object-cover" />
           </span>
-          {activeToolMeta ? activeToolMeta.name : 'PDF Toolkit'}
+          {activeToolMeta ? (
+            <span className="text-4xl sm:text-3xl" style={brandTextStyle}>
+              {activeToolMeta.name}
+            </span>
+          ) : (
+            <span className="text-4xl sm:text-3xl" style={brandTextStyle}>
+              MergeMate
+            </span>
+          )}
         </h1>
         <p className="mt-2 text-lg font-light text-white/70 sm:text-base">
           {activeToolMeta
             ? activeToolMeta.description
-            : 'Select a tool to get started with your PDF workflows'}
+            : 'Select a tool to get started with MergeMate PDF workflows'}
         </p>
       </motion.header>
 

@@ -1,15 +1,15 @@
-# PDF Merger Web App
+# MergeMate (MM) Web App
 
-A modern, minimalistic PDF merger application built with React. Features a beautiful orange-themed UI with glowing effects and smooth animations.
+MergeMate (MM) is a modern, minimalistic PDF toolkit built with React. It features a beautiful orange-themed UI with glowing effects and smooth animations.
 
 ## ✨ Features
 
-- **Drag & Drop Support**: Simply drag and drop your PDF files onto the upload area
+- **Drag & Drop Support**: Simply drag and drop your PDF files onto the MergeMate upload area
 - **File Selection**: Click to browse and select PDF files from your computer
-- **Reorder PDFs**: Drag to reorder files before merging
+- **Reorder PDFs**: Drag to reorder files before merging with MergeMate
 - **Beautiful UI**: Modern design with orange gradient theme and glowing effects
 - **Responsive**: Works perfectly on desktop and mobile devices
-- **Instant Download**: Download your merged PDF with one click
+- **Instant Download**: Download your processed PDFs with one click
 - **Visual Feedback**: Smooth animations and notifications for all actions
 
 ## 🚀 Getting Started
@@ -85,13 +85,13 @@ The build folder will contain the optimized production-ready files.
 Files can be dragged directly onto the upload area for quick addition.
 
 ### File Reordering
-Click and drag files in the list to reorder them before merging.
+Click and drag files in the list to reorder them before merging with MergeMate.
 
 ### PDF Merging
-All PDFs are merged in the order shown, maintaining their original formatting.
+All PDFs are merged in the order shown, maintaining their original formatting thanks to MergeMate.
 
 ### Download
-The merged PDF is generated client-side and can be downloaded instantly.
+Processed PDFs are generated client-side and can be downloaded instantly through MergeMate.
 
 ## 💡 Tips
 
