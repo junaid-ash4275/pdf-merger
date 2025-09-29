@@ -132,14 +132,6 @@ function App() {
           >
             Split PDF
           </button>
-          <a
-            href="https://github.com/"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full px-4 py-2 text-white/70 transition duration-300 hover:bg-white/15 hover:text-white"
-          >
-            GitHub
-          </a>
         </div>
       </motion.nav>
 
