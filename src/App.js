@@ -1,12 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiChevronRight, FiLayers, FiScissors, FiGrid, FiRefreshCcw } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronRight, FiLayers, FiScissors, FiGrid, FiRefreshCcw, FiDroplet, FiLock } from 'react-icons/fi';
 
 import PDFMerger from './components/PDFMerger';
 import PDFPageRemover from './components/PDFPageRemover';
 import PDFSplitter from './components/PDFSplitter';
 import PDFPageOrganizer from './components/PDFPageOrganizer';
 
+import PDFWatermarkTool from './components/PDFWatermarkTool';
+import PDFPasswordProtect from './components/PDFPasswordProtect';
 function App() {
   const [activeTool, setActiveTool] = useState(null);
   const brandLogo = `${process.env.PUBLIC_URL || ''}/assets/brand.png`;
@@ -48,6 +50,22 @@ function App() {
         icon: FiRefreshCcw,
         accent: 'from-[rgba(255,184,77,0.18)] via-[rgba(255,140,66,0.14)] to-transparent',
         component: <PDFPageOrganizer />
+      },
+      {
+        id: 'watermark',
+        name: 'Watermark PDFs',
+        description: 'Preview and apply custom watermarks with live positioning controls.',
+        icon: FiDroplet,
+        accent: 'from-[rgba(56,189,248,0.18)] via-[rgba(103,232,249,0.14)] to-transparent',
+        component: <PDFWatermarkTool />
+      },
+      {
+        id: 'protect',
+        name: 'Password Protect',
+        description: 'Secure your PDFs with passwords and tailored restrictions.',
+        icon: FiLock,
+        accent: 'from-[rgba(99,102,241,0.18)] via-[rgba(129,140,248,0.14)] to-transparent',
+        component: <PDFPasswordProtect />
       },
       {
         id: 'split',
@@ -124,6 +142,20 @@ function App() {
             onClick={() => handleNavClick('organize')}
           >
             Organize Pages
+          </button>
+          <button
+            type="button"
+            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'watermark' ? 'bg-white/15 text-white' : 'text-white/70'}`}
+            onClick={() => handleNavClick('watermark')}
+          >
+            Watermark PDFs
+          </button>
+          <button
+            type="button"
+            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'protect' ? 'bg-white/15 text-white' : 'text-white/70'}`}
+            onClick={() => handleNavClick('protect')}
+          >
+            Password Protect
           </button>
           <button
             type="button"
