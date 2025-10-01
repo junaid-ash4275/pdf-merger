@@ -156,7 +156,6 @@ const PDFPageRemover = () => {
     setProcessing(false);
 
     try {
-      debugger;
       const arrayBuffer = await pdfFile.arrayBuffer();
       const { base, extension } = extractNameParts(pdfFile.name);
       const { totalPages, pages: pageEntries } = await generateThumbnails(arrayBuffer);
@@ -292,7 +291,7 @@ const PDFPageRemover = () => {
   const hasPdfLoaded = Boolean(pdfInfo && pages.length > 0);
 
   return (
-    <div className="relative mx-auto w-full max-w-[1200px]">
+    <div className="relative mx-auto w-full max-w-[960px]">
       <AnimatePresence>
         {notification && (
           <motion.div

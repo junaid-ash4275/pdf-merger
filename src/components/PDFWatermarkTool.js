@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -266,7 +266,13 @@ const PDFWatermarkTool = () => {
       const { r, g, b } = hexToRgb(color || '#FF6B35');
 
       for (const descriptor of pdfFiles) {
-        const pdfDoc = await PDFDocument.load(descriptor.pdfBytes);
+        if (!descriptor?.file) {
+          console.warn('Missing file reference for descriptor', descriptor);
+          continue;
+        }
+
+        const pdfBytes = await descriptor.file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(pdfBytes);
         const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
         const pages = pdfDoc.getPages();
 
@@ -287,7 +293,7 @@ const PDFWatermarkTool = () => {
             font,
             color: rgb(r, g, b),
             opacity,
-            rotate: degrees(rotation)
+            rotate: degrees(-rotation) // invert to match CSS rotate direction
           });
         });
 
@@ -312,7 +318,7 @@ const PDFWatermarkTool = () => {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[900px]">
+    <div className="relative mx-auto w-full max-w-[960px]">
       <AnimatePresence>
         {notification && (
           <motion.div

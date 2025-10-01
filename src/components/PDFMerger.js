@@ -196,7 +196,7 @@ const PDFMerger = () => {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[800px]">
+    <div className="relative mx-auto w-full max-w-[960px]">
       {/* Notification */}
       <AnimatePresence>
         {notification && (

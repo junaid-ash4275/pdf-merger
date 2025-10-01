@@ -389,7 +389,7 @@ const PDFPageOrganizer = () => {
   const selectedCount = useMemo(() => pages.filter((page) => page.selected).length, [pages]);
 
   return (
-    <div className="relative mx-auto w-full max-w-[1200px]">
+    <div className="relative mx-auto w-full max-w-[960px]">
       <AnimatePresence>
         {notification && (
           <motion.div

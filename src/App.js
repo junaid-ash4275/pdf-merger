@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiChevronRight, FiLayers, FiScissors, FiGrid, FiRefreshCcw, FiDroplet, FiLock } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronDown, FiChevronRight, FiLayers, FiScissors, FiGrid, FiRefreshCcw, FiDroplet, FiLock } from 'react-icons/fi';
 
 import PDFMerger from './components/PDFMerger';
 import PDFPageRemover from './components/PDFPageRemover';
@@ -11,6 +11,8 @@ import PDFWatermarkTool from './components/PDFWatermarkTool';
 import PDFPasswordProtect from './components/PDFPasswordProtect';
 function App() {
   const [activeTool, setActiveTool] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const brandLogo = `${process.env.PUBLIC_URL || ''}/assets/brand.png`;
   const brandTextStyle = {
     fontFamily: "'Quattrocento', 'Poppins', 'Inter', serif",
@@ -19,11 +21,35 @@ function App() {
 
   const handleNavClick = (toolId) => {
     setActiveTool(toolId ?? null);
+    setIsDropdownOpen(false);
 
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (!dropdownRef.current) {
+        return;
+      }
+
+      const path = typeof event.composedPath === 'function' ? event.composedPath() : undefined;
+      if (dropdownRef.current.contains(event.target) || path?.includes(dropdownRef.current)) {
+        return;
+      }
+
+      setIsDropdownOpen(false);
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('pointerdown', handlePointerDown);
+    }
+    
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [isDropdownOpen]);
 
   const tools = useMemo(
     () => [
@@ -79,6 +105,20 @@ function App() {
     []
   );
 
+  const primaryNavItems = useMemo(
+    () => [
+      { id: null, label: 'Home' },
+      { id: 'merge', label: 'Merge PDFs' },
+      { id: 'organize', label: 'Organize Pages' }
+    ],
+    []
+  );
+
+  const dropdownTools = useMemo(
+    () => tools.filter(({ id }) => !['merge', 'organize'].includes(id)),
+    [tools]
+  );
+
   const activeToolMeta = activeTool ? tools.find((tool) => tool.id === activeTool) : null;
 
   return (
@@ -96,7 +136,7 @@ function App() {
       </div>
 
       <motion.nav
-        className="relative z-[2] flex flex-col gap-4 px-6 pt-8 text-white sm:flex-row sm:items-center sm:justify-between"
+        className="relative z-[100] flex flex-col gap-4 px-6 pt-8 text-white sm:flex-row sm:items-center sm:justify-between"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -115,55 +155,62 @@ function App() {
         </button>
 
         <div className="flex flex-wrap items-center gap-2 text-sm font-medium sm:justify-end">
-          <button
-            type="button"
-            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${!activeTool ? 'bg-white/15 text-white' : 'text-white/70'}`}
-            onClick={() => handleNavClick(null)}
-          >
-            Home
-          </button>
-          <button
-            type="button"
-            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'merge' ? 'bg-white/15 text-white' : 'text-white/70'}`}
-            onClick={() => handleNavClick('merge')}
-          >
-            Merge PDFs
-          </button>
-          <button
-            type="button"
-            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'remove' ? 'bg-white/15 text-white' : 'text-white/70'}`}
-            onClick={() => handleNavClick('remove')}
-          >
-            Remove Pages
-          </button>
-          <button
-            type="button"
-            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'organize' ? 'bg-white/15 text-white' : 'text-white/70'}`}
-            onClick={() => handleNavClick('organize')}
-          >
-            Organize Pages
-          </button>
-          <button
-            type="button"
-            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'watermark' ? 'bg-white/15 text-white' : 'text-white/70'}`}
-            onClick={() => handleNavClick('watermark')}
-          >
-            Watermark PDFs
-          </button>
-          <button
-            type="button"
-            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'protect' ? 'bg-white/15 text-white' : 'text-white/70'}`}
-            onClick={() => handleNavClick('protect')}
-          >
-            Password Protect
-          </button>
-          <button
-            type="button"
-            className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${activeTool === 'split' ? 'bg-white/15 text-white' : 'text-white/70'}`}
-            onClick={() => handleNavClick('split')}
-          >
-            Split PDF
-          </button>
+          {primaryNavItems.map(({ id, label }) => {
+            const isActive = id === null ? !activeTool : activeTool === id;
+            const targetId = id ?? null;
+
+            return (
+              <button
+                key={label}
+                type="button"
+                className={`rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${isActive ? 'bg-white/15 text-white' : 'text-white/70'}`}
+                onClick={() => handleNavClick(targetId)}
+              >
+                {label}
+              </button>
+            );
+          })}
+          <div ref={dropdownRef} className="relative">
+            <button
+              type="button"
+              className={`flex items-center gap-2 rounded-full px-4 py-2 transition duration-300 hover:bg-white/15 ${dropdownTools.some(({ id }) => id === activeTool) ? 'bg-white/15 text-white' : 'text-white/70'}`}
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+            >
+              All Tools
+              <FiChevronDown className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {isDropdownOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="absolute right-0 z-[9999] mt-2 w-56 rounded-2xl border border-white/10 bg-black/80 p-2 shadow-merger-card backdrop-blur-xl"
+                style={{ pointerEvents: 'auto' }}
+                onClick={() => console.log('Dropdown container clicked')}
+              >
+                {dropdownTools.map(({ id, name }) => {
+                  const isActive = activeTool === id;
+
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      className={`w-full rounded-xl px-4 py-2 text-left text-sm transition duration-200 cursor-pointer ${isActive ? 'bg-white/15 text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
+                      onClick={(e) => {
+                        console.log('Button clicked:', id);
+                        e.stopPropagation();
+                        handleNavClick(id);
+                      }}
+                      onMouseEnter={() => console.log('Mouse entered:', id)}
+                      style={{ pointerEvents: 'auto' }}
+                    >
+                      {name}
+                    </button>
+                  );
+                })}
+              </motion.div>
+            )}
+          </div>
         </div>
       </motion.nav>
 
@@ -227,12 +274,12 @@ function App() {
             {activeToolMeta.component}
           </div>
         ) : (
-          <div className="grid w-full max-w-[1024px] grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid w-full max-w-[1200px] grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {tools.map(({ id, name, description, icon: Icon, accent }) => (
               <motion.button
                 key={id}
                 type="button"
-                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-[rgba(255,107,53,0.2)] bg-white/5 p-8 text-left shadow-merger-card backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:border-[rgba(255,107,53,0.35)] hover:bg-white/10 hover:shadow-merger-card-strong"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-[rgba(255,107,53,0.2)] bg-white/5 p-6 md:p-7 text-left shadow-merger-card backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:border-[rgba(255,107,53,0.35)] hover:bg-white/10 hover:shadow-merger-card-strong"
                 onClick={() => setActiveTool(id)}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}

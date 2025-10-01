@@ -164,7 +164,7 @@ const PDFPasswordProtect = () => {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[860px]">
+    <div className="relative mx-auto w-full max-w-[960px]">
       <AnimatePresence>
         {notification && (
           <motion.div
