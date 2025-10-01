@@ -311,7 +311,7 @@ function App() {
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <p>
-          Made with <span className="text-brand-orange animate-heartbeat">❤️</span> using React
+          Made with <span className="text-brand-orange animate-heartbeat">❤️</span> By Junaid Ashraf
         </p>
       </motion.footer>
     </div>
