@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiChevronDown, FiChevronRight, FiLayers, FiScissors, FiGrid, FiRefreshCcw, FiDroplet, FiLock } from 'react-icons/fi';
+import { FiArrowLeft, FiChevronDown, FiChevronRight, FiLayers, FiScissors, FiGrid, FiRefreshCcw, FiDroplet, FiLock, FiEdit3 } from 'react-icons/fi';
 
 import PDFMerger from './components/PDFMerger';
 import PDFPageRemover from './components/PDFPageRemover';
@@ -9,6 +9,7 @@ import PDFPageOrganizer from './components/PDFPageOrganizer';
 
 import PDFWatermarkTool from './components/PDFWatermarkTool';
 import PDFPasswordProtect from './components/PDFPasswordProtect';
+import PDFEditor from './components/PDFEditor';
 function App() {
   const [activeTool, setActiveTool] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -45,7 +46,7 @@ function App() {
     if (isDropdownOpen) {
       document.addEventListener('pointerdown', handlePointerDown);
     }
-    
+
     return () => {
       document.removeEventListener('pointerdown', handlePointerDown);
     };
@@ -77,6 +78,14 @@ function App() {
         accent: 'from-[rgba(255,184,77,0.18)] via-[rgba(255,140,66,0.14)] to-transparent',
         component: <PDFPageOrganizer />
       },
+      // {
+      //   id: 'edit',
+      //   name: 'Edit PDF',
+      //   description: 'Insert text or highlights directly onto your PDF before exporting.',
+      //   icon: FiEdit3,
+      //   accent: 'from-[rgba(253,224,71,0.18)] via-[rgba(255,213,79,0.14)] to-transparent',
+      //   component: <PDFEditor />
+      // },
       {
         id: 'watermark',
         name: 'Watermark PDFs',
@@ -319,3 +328,8 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
