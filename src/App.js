@@ -195,7 +195,6 @@ function App() {
                 transition={{ duration: 0.2 }}
                 className="absolute right-0 z-[9999] mt-2 w-56 rounded-2xl border border-white/10 bg-black/80 p-2 shadow-merger-card backdrop-blur-xl"
                 style={{ pointerEvents: 'auto' }}
-                onClick={() => console.log('Dropdown container clicked')}
               >
                 {dropdownTools.map(({ id, name }) => {
                   const isActive = activeTool === id;
@@ -206,11 +205,9 @@ function App() {
                       type="button"
                       className={`w-full rounded-xl px-4 py-2 text-left text-sm transition duration-200 cursor-pointer ${isActive ? 'bg-white/15 text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
                       onClick={(e) => {
-                        console.log('Button clicked:', id);
                         e.stopPropagation();
                         handleNavClick(id);
                       }}
-                      onMouseEnter={() => console.log('Mouse entered:', id)}
                       style={{ pointerEvents: 'auto' }}
                     >
                       {name}
